@@ -1549,7 +1549,7 @@ esp_err_t Api::handle_get_dome_altitude(httpd_req_t *req)
   {
     Dome *dome = (Dome *)device;
 
-    float altitude = 0;
+    double altitude = 0;
     if (check_return(dome->get_altitude(&altitude), root))
     {
       cJSON_AddNumberToObject(root, "Value", altitude);
@@ -1645,7 +1645,7 @@ esp_err_t Api::handle_get_dome_azimuth(httpd_req_t *req)
   {
     Dome *dome = (Dome *)device;
 
-    float azimuth = 0;
+    double azimuth = 0;
     if (check_return(dome->get_azimuth(&azimuth), root))
     {
       cJSON_AddNumberToObject(root, "Value", azimuth);
