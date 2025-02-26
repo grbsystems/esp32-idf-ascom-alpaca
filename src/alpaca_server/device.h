@@ -128,10 +128,10 @@ public:
 
   DeviceType device_type() override;
 
-  virtual esp_err_t get_altitude(float *altitude) = 0;
+  virtual esp_err_t get_altitude(double *altitude) = 0;
   virtual esp_err_t get_athome(bool *athome) = 0;
   virtual esp_err_t get_atpark(bool *atpark) = 0;
-  virtual esp_err_t get_azimuth(float *azimuth) = 0;
+  virtual esp_err_t get_azimuth(double *azimuth) = 0;
   virtual esp_err_t get_canfindhome(bool *canfindhome) = 0;
   virtual esp_err_t get_canpark(bool *canpark) = 0;
   virtual esp_err_t get_cansetaltitude(bool *cansetaltitude) = 0;
@@ -150,9 +150,9 @@ public:
   virtual esp_err_t put_openshutter() = 0;
   virtual esp_err_t put_park() = 0;
   virtual esp_err_t put_setpark() = 0;
-  virtual esp_err_t put_slewtoaltitude(float altitude) = 0;
-  virtual esp_err_t put_slewtoazimuth(float azimuth) = 0;
-  virtual esp_err_t put_synctoazimuth(float azimuth) = 0;
+  virtual esp_err_t put_slewtoaltitude(double altitude) = 0;
+  virtual esp_err_t put_slewtoazimuth(double azimuth) = 0;
+  virtual esp_err_t put_synctoazimuth(double azimuth) = 0;
 };
 
 class FilterWheel : public Device
@@ -278,10 +278,102 @@ public:
 class Telescope : public Device
 {
 public:
+  enum class AlignmentMode
+  {
+    AltAz = 0,
+    Polar = 1,
+    GermanPolar = 2,
+  };
+
+  struct AxisRate
+  {
+    double min;
+    double max;
+  };
+
+public:
   Telescope();
   ~Telescope();
 
   DeviceType device_type() override;
+
+  virtual esp_err_t get_alignmentmode(AlignmentMode *alignmentmode) = 0;
+  virtual esp_err_t get_altitude(double *altitude) = 0;
+  virtual esp_err_t get_aperturearea(double *aperture) = 0;
+  virtual esp_err_t get_aperturediameter(double *aperture) = 0;
+  virtual esp_err_t get_athome(bool *athome) = 0;
+  virtual esp_err_t get_atpark(bool *atpark) = 0;
+  virtual esp_err_t get_azimuth(double *azimuth) = 0;
+  virtual esp_err_t get_canfindhome(bool *canfindhome) = 0;
+  virtual esp_err_t get_canpark(bool *canpark) = 0;
+  virtual esp_err_t get_canpulseguide(bool *canpulseguide) = 0;
+  virtual esp_err_t get_cansetdeclinationrate(bool *cansetdeclinationrate) = 0;
+  virtual esp_err_t get_cansetguiderates(bool *cansetguiderates) = 0;
+  virtual esp_err_t get_cansetpark(bool *cansetpark) = 0;
+  virtual esp_err_t get_cansetpierside(bool *cansetpierside) = 0;
+  virtual esp_err_t get_cansetrightascensionrate(bool *cansetrightascensionrate) = 0;
+  virtual esp_err_t get_cansettracking(bool *cansettracking) = 0;
+  virtual esp_err_t get_canslew(bool *canslew) = 0;
+  virtual esp_err_t get_canslewaltaz(bool *canslewaltaz) = 0;
+  virtual esp_err_t get_canslewaltazasync(bool *canslewaltazasync) = 0;
+  virtual esp_err_t get_canslewasync(bool *canslewasync) = 0;
+  virtual esp_err_t get_cansync(bool *cansync) = 0;
+  virtual esp_err_t get_cansyncaltaz(bool *cansyncaltaz) = 0;
+  virtual esp_err_t get_canunpark(bool *canunpark) = 0;
+  virtual esp_err_t get_declination(double *declination) = 0;
+  virtual esp_err_t get_declinationrate(double *declinationrate) = 0;
+  virtual esp_err_t put_declinationrate(double declinationrate) = 0;
+  virtual esp_err_t get_doesrefraction(bool *doesrefraction) = 0;
+  virtual esp_err_t put_doesrefraction(bool doesrefraction) = 0;
+  virtual esp_err_t get_equatorialsystem(bool *equatorialsystem) = 0;
+  virtual esp_err_t get_focallength(double *focallength) = 0;
+  virtual esp_err_t get_guideratedeclination(double *guideratedeclination) = 0;
+  virtual esp_err_t put_guideratedeclination(double guideratedeclination) = 0;
+  virtual esp_err_t get_guideraterightascension(double *guideraterightascension) = 0;
+  virtual esp_err_t put_guideraterightascension(double guideraterightascension) = 0;
+  virtual esp_err_t get_ispulseguiding(bool *ispulseguiding) = 0;
+  virtual esp_err_t get_rightascension(double *rightascension) = 0;
+  virtual esp_err_t get_rightascensionrate(double *rightascensionrate) = 0;
+  virtual esp_err_t put_rightascensionrate(double rightascensionrate) = 0;
+  virtual esp_err_t get_sideofpier(bool *sideofpier) = 0;
+  virtual esp_err_t put_sideofpier(bool sideofpier) = 0;
+  virtual esp_err_t get_siderealtime(double *siderealtime) = 0;
+  virtual esp_err_t get_siteelevation(double *siteelevation) = 0;
+  virtual esp_err_t put_siteelevation(double siteelevation) = 0;
+  virtual esp_err_t get_sitelatitude(double *siteslatitude) = 0;
+  virtual esp_err_t put_sitelatitude(double siteslatitude) = 0;
+  virtual esp_err_t get_sitelongitude(double *sitelongitude) = 0;
+  virtual esp_err_t put_sitelongitude(double sitelongitude) = 0;
+  virtual esp_err_t get_slewing(bool *slewing) = 0;
+  virtual esp_err_t get_slewsettletime(int32_t *slewsettletime) = 0;
+  virtual esp_err_t put_slewsettletime(int32_t slewsettletime) = 0;
+  virtual esp_err_t get_targetdeclination(double *targetdeclination) = 0;
+  virtual esp_err_t put_targetdeclination(double targetdeclination) = 0;
+  virtual esp_err_t get_targetrightascension(double *targetrightascension) = 0;
+  virtual esp_err_t put_targetrightascension(double targetrightascension) = 0;
+  virtual esp_err_t get_tracking(bool *tracking) = 0;
+  virtual esp_err_t put_tracking(bool tracking) = 0;
+  virtual esp_err_t get_trackingrate(int32_t *trackingrate) = 0;
+  virtual esp_err_t put_trackingrate(int32_t trackingrate) = 0;
+  virtual esp_err_t get_trackingrates(std::vector<int32_t> &trackingrates) = 0;
+  virtual esp_err_t get_utcdate(std::string &utcdate) = 0;       // ISO 8601
+  virtual esp_err_t put_utcdate(const std::string &utcdate) = 0; // ISO 8601
+  virtual esp_err_t put_abortslew() = 0;
+  virtual esp_err_t get_axisrates(int32_t axis, std::vector<AxisRate> &rates) = 0;
+  virtual esp_err_t get_canmoveaxis(int32_t axis, bool *canmoveaxis) = 0;
+  virtual esp_err_t get_destinationsideofpier(double rightascension, double declination, bool *sideofpier) = 0;
+  virtual esp_err_t put_findhome() = 0;
+  virtual esp_err_t put_moveaxis(int32_t axis, double rate) = 0;
+  virtual esp_err_t put_park() = 0;
+  virtual esp_err_t put_pulseguide(int32_t direction, int32_t duration) = 0;
+  virtual esp_err_t put_setpark() = 0;
+  virtual esp_err_t put_slewtoaltazasync(double altitude, double azimuth) = 0;
+  virtual esp_err_t put_slewtocordinatesasync(double rightascension, double declination) = 0;
+  virtual esp_err_t put_slewtotargetasync() = 0;
+  virtual esp_err_t put_synctoaltaz(double altitude, double azimuth) = 0;
+  virtual esp_err_t put_synctocoordinates(double rightascension, double declination) = 0;
+  virtual esp_err_t put_synctotarget() = 0;
+  virtual esp_err_t put_unpark() = 0;
 };
 
 } // namespace AlpacaServer
