@@ -1,3 +1,9 @@
+## 1.2.3 (2025-03-03)
+
+### Fix
+
+- **telescope**: fix guide direction enum
+
 ## 1.2.2 (2025-03-03)
 
 ### Fix
