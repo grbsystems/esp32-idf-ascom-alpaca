@@ -468,7 +468,7 @@ void Api::register_switch_routes(httpd_handle_t server, size_t device_number, Sw
 
 void Api::register_telescope_routes(httpd_handle_t server, size_t device_number, Telescope *device)
 {
-  // TODO: Implement telescope routes
+  char uri[128];
 }
 
 void parse_string(alpaca_request_t *req, char *query, bool case_sensitive = true)
@@ -4586,5 +4586,2848 @@ esp_err_t Api::handle_get_switch_switchstep(httpd_req_t *req)
 }
 
 // Telescope API
+
+esp_err_t Api::handle_get_telescope_alignmentmode(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    Telescope::AlignmentMode value = Telescope::AlignmentMode::AltAz;
+    if (check_return(telescope_device->get_alignmentmode(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", (int)value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_altitude(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = 0.0;
+    if (check_return(telescope_device->get_altitude(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_aperturearea(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = 0.0;
+    if (check_return(telescope_device->get_aperturearea(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_aperturediameter(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = 0.0;
+    if (check_return(telescope_device->get_aperturediameter(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_athome(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_athome(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_atpark(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_atpark(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_azimuth(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = 0.0;
+    if (check_return(telescope_device->get_azimuth(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_canfindhome(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_canfindhome(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_canpark(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_canpark(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_canpulseguide(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_canpulseguide(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_cansetdeclinationrate(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_cansetdeclinationrate(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_cansetguiderates(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_cansetguiderates(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_cansetpark(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_cansetpark(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_cansetpierside(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_cansetpierside(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_cansetrightascensionrate(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_cansetrightascensionrate(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_cansettracking(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_cansettracking(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_canslew(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_canslew(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_canslewaltaz(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_canslewaltaz(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_canslewaltazasync(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_canslewaltazasync(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_canslewasync(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_canslewasync(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_cansync(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_cansync(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_cansyncaltaz(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_cansyncaltaz(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_canunpark(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_canunpark(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_declination(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = 0.0;
+    if (check_return(telescope_device->get_declination(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_declinationrate(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = 0.0;
+    if (check_return(telescope_device->get_declinationrate(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_declinationrate(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double DeclinationRate = cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "DeclinationRate"));
+    if (DeclinationRate != NAN)
+    {
+      if (check_return(telescope_device->put_declinationrate(DeclinationRate), root))
+      {
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_doesrefraction(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_doesrefraction(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_doesrefraction(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    cJSON *DoesRefraction = cJSON_GetObjectItem(parsed_request.body, "DoesRefraction");
+    if (cJSON_IsBool(DoesRefraction))
+    {
+      if (check_return(telescope_device->put_doesrefraction(cJSON_IsTrue(DoesRefraction)), root))
+      {
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_equatorialsystem(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    Telescope::EquatorialSystem value = Telescope::EquatorialSystem::Other;
+    if (check_return(telescope_device->get_equatorialsystem(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", (int)value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_focallength(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = 0.0;
+    if (check_return(telescope_device->get_focallength(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_guideratedeclination(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = 0.0;
+    if (check_return(telescope_device->get_guideratedeclination(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_guideratedeclination(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double GuideRateDeclination =
+        cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "GuideRateDeclination"));
+    if (GuideRateDeclination != NAN)
+    {
+      if (check_return(telescope_device->put_guideratedeclination(GuideRateDeclination), root))
+      {
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_guideraterightascension(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = 0.0;
+    if (check_return(telescope_device->get_guideraterightascension(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_guideraterightascension(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double GuideRateRightAscension =
+        cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "GuideRateRightAscension"));
+    if (GuideRateRightAscension != NAN)
+    {
+      if (check_return(telescope_device->put_guideraterightascension(GuideRateRightAscension), root))
+      {
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_ispulseguiding(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_ispulseguiding(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_rightascension(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = 0.0;
+    if (check_return(telescope_device->get_rightascension(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_rightascensionrate(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = 0.0;
+    if (check_return(telescope_device->get_rightascensionrate(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_rightascensionrate(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double RightAscensionRate = cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "RightAscensionRate"));
+    if (RightAscensionRate != NAN)
+    {
+      if (check_return(telescope_device->put_rightascensionrate(RightAscensionRate), root))
+      {
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_sideofpier(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    Telescope::SideOfPier value = Telescope::SideOfPier::Unknown;
+    if (check_return(telescope_device->get_sideofpier(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", (int)value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_sideofpier(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    Telescope::SideOfPier sideofpier =
+        (Telescope::SideOfPier)cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "SideOfPier"));
+    if (sideofpier != Telescope::SideOfPier::Unknown)
+    {
+      if (check_return(telescope_device->put_sideofpier(sideofpier), root))
+      {
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_siderealtime(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = 0.0;
+    if (check_return(telescope_device->get_siderealtime(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_siteelevation(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = 0.0;
+    if (check_return(telescope_device->get_siteelevation(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_siteelevation(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double SiteElevation = cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "SiteElevation"));
+    if (SiteElevation != NAN)
+    {
+      if (check_return(telescope_device->put_siteelevation(SiteElevation), root))
+      {
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_sitelatitude(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = 0.0;
+    if (check_return(telescope_device->get_sitelatitude(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_sitelatitude(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "SiteLatitude"));
+    if (value != NAN)
+    {
+      if (check_return(telescope_device->put_sitelatitude(value), root))
+      {
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_sitelongitude(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = 0.0;
+    if (check_return(telescope_device->get_sitelongitude(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_sitelongitude(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "SiteLongitude"));
+    if (value != NAN)
+    {
+      if (check_return(telescope_device->put_sitelongitude(value), root))
+      {
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_slewing(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_slewing(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_slewsettletime(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    int32_t value = 0;
+    if (check_return(telescope_device->get_slewsettletime(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_slewsettletime(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "SlewSettleTime"));
+    if (value != NAN)
+    {
+      if (check_return(telescope_device->put_slewsettletime(value), root))
+      {
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_targetdeclination(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = 0.0;
+    if (check_return(telescope_device->get_targetdeclination(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_targetdeclination(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "TargetDeclination"));
+    if (value != NAN)
+    {
+      if (check_return(telescope_device->put_targetdeclination(value), root))
+      {
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_targetrightascension(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = 0.0;
+    if (check_return(telescope_device->get_targetrightascension(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_targetrightascension(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "TargetRightAscension"));
+    if (value != NAN)
+    {
+      if (check_return(telescope_device->put_targetrightascension(value), root))
+      {
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_tracking(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    bool value = false;
+    if (check_return(telescope_device->get_tracking(&value), root))
+    {
+      cJSON_AddBoolToObject(root, "Value", value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_tracking(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    cJSON *Tracking = (cJSON_GetObjectItem(parsed_request.body, "Tracking"));
+    if (cJSON_IsBool(Tracking))
+    {
+      if (check_return(telescope_device->put_tracking(cJSON_IsTrue(Tracking)), root))
+      {
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_trackingrate(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    Telescope::TrackingRate value = Telescope::TrackingRate::Sidereal;
+    if (check_return(telescope_device->get_trackingrate(&value), root))
+    {
+      cJSON_AddNumberToObject(root, "Value", (int)value);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_trackingrate(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double value = cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "TrackingRate"));
+    if (value != NAN && value >= 0 && value <= 3)
+    {
+      if (check_return(telescope_device->put_trackingrate((Telescope::TrackingRate)value), root))
+      {
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_trackingrates(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    std::vector<Telescope::TrackingRate> value;
+    if (check_return(telescope_device->get_trackingrates(value), root))
+    {
+      cJSON *array = cJSON_CreateArray();
+      for (auto &v : value)
+      {
+        cJSON_AddItemToArray(array, cJSON_CreateNumber((int)v));
+      }
+      cJSON_AddItemToObject(root, "Value", array);
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_utcdate(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    std::string value;
+    if (check_return(telescope_device->get_utcdate(value), root))
+    {
+      cJSON_AddStringToObject(root, "Value", value.c_str());
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_utcdate(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    std::string value = cJSON_GetStringValue(cJSON_GetObjectItem(parsed_request.body, "UTCDate"));
+    if (!value.empty())
+    {
+      if (check_return(telescope_device->put_utcdate(value), root))
+      {
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_abortslew(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    if (check_return(telescope_device->put_abortslew(), root))
+    {
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_axisrates(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    char *axisStr = cJSON_GetStringValue(cJSON_GetObjectItem(parsed_request.body, "Axis"));
+    if (axisStr != NULL)
+    {
+      Telescope::TelescopeAxis axis = (Telescope::TelescopeAxis)atoi(axisStr);
+      std::vector<Telescope::AxisRate> value;
+
+      if (check_return(telescope_device->get_axisrates(axis, value), root))
+      {
+        cJSON *array = cJSON_CreateArray();
+        for (auto &v : value)
+        {
+          cJSON *rate = cJSON_CreateObject();
+          cJSON_AddNumberToObject(rate, "Minimum", v.min);
+          cJSON_AddNumberToObject(rate, "Maximum", v.max);
+          cJSON_AddItemToArray(array, rate);
+        }
+        cJSON_AddItemToObject(root, "Value", array);
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_canmoveaxis(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    char *axisStr = cJSON_GetStringValue(cJSON_GetObjectItem(parsed_request.body, "Axis"));
+    if (axisStr != NULL)
+    {
+      Telescope::TelescopeAxis axis = (Telescope::TelescopeAxis)atoi(axisStr);
+      bool value = false;
+
+      if (check_return(telescope_device->get_canmoveaxis(axis, &value), root))
+      {
+        cJSON_AddBoolToObject(root, "Value", value);
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_get_telescope_destinationsideofpier(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    char *RightAscensionStr = cJSON_GetStringValue(cJSON_GetObjectItem(parsed_request.body, "RightAscension"));
+    char *DeclinationStr = cJSON_GetStringValue(cJSON_GetObjectItem(parsed_request.body, "Declination"));
+    if (RightAscensionStr != NULL && DeclinationStr != NULL)
+    {
+      double RightAscension = atof(RightAscensionStr);
+      double Declination = atof(DeclinationStr);
+
+      Telescope::SideOfPier value = Telescope::SideOfPier::Unknown;
+
+      if (check_return(telescope_device->get_destinationsideofpier(RightAscension, Declination, &value), root))
+      {
+        cJSON_AddNumberToObject(root, "Value", (int)value);
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_findhome(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    if (check_return(telescope_device->put_findhome(), root))
+    {
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_moveaxis(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    int32_t Axis = cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "Axis"));
+    double Rate = cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "Rate"));
+    if (Rate != NAN)
+    {
+      if (check_return(telescope_device->put_moveaxis((Telescope::TelescopeAxis)Axis, Rate), root))
+      {
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_park(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    if (check_return(telescope_device->put_park(), root))
+    {
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_pulseguide(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    int32_t Direction = cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "Direction"));
+    int32_t Duration = cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "Duration"));
+    if (Direction != NAN && Duration != NAN)
+    {
+      if (check_return(telescope_device->put_pulseguide((Telescope::GuideDirection)Direction, Duration), root))
+      {
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_setpark(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    if (check_return(telescope_device->put_setpark(), root))
+    {
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_slewtoaltazasync(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double Azimuth = cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "Azimuth"));
+    double Altitude = cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "Altitude"));
+    if (Altitude != NAN && Azimuth != NAN)
+    {
+      if (check_return(telescope_device->put_slewtoaltazasync(Altitude, Azimuth), root))
+      {
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_slewtocoordinatesasync(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double RightAscension = cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "RightAscension"));
+    double Declination = cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "Declination"));
+    if (RightAscension != NAN && Declination != NAN)
+    {
+      if (check_return(telescope_device->put_slewtocoordinatesasync(RightAscension, Declination), root))
+      {
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_slewtotargetasync(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    if (check_return(telescope_device->put_slewtotargetasync(), root))
+    {
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_synctoaltaz(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double Azimuth = cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "Azimuth"));
+    double Altitude = cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "Altitude"));
+    if (Altitude != NAN && Azimuth != NAN)
+    {
+      if (check_return(telescope_device->put_synctoaltaz(Altitude, Azimuth), root))
+      {
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_synctocoordinates(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    double RightAscension = cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "RightAscension"));
+    double Declination = cJSON_GetNumberValue(cJSON_GetObjectItem(parsed_request.body, "Declination"));
+    if (RightAscension != NAN && Declination != NAN)
+    {
+      if (check_return(telescope_device->put_synctocoordinates(RightAscension, Declination), root))
+      {
+      }
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_synctotarget(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    if (check_return(telescope_device->put_synctotarget(), root))
+    {
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
+
+esp_err_t Api::handle_put_telescope_unpark(httpd_req_t *req)
+{
+  Api *api = (Api *)req->user_ctx;
+  alpaca_request_t parsed_request;
+  esp_err_t err = api->parse_request(req, &parsed_request);
+  if (err != ESP_OK)
+  {
+    api->send_error_response(req, err == ESP_ERR_NOT_FOUND ? 404 : 400);
+    return err;
+  }
+  cJSON *root = cJSON_CreateObject();
+  Device *device = api->_devices[parsed_request.device_type][parsed_request.device_number];
+
+  if (parsed_request.device_type == DeviceType::Telescope)
+  {
+    Telescope *telescope_device = (Telescope *)device;
+    if (check_return(telescope_device->put_unpark(), root))
+    {
+    }
+    else
+    {
+      cJSON_Delete(root);
+      return api->send_error_response(req, 400);
+    }
+  }
+  else
+  {
+    cJSON_AddNumberToObject(root, "ErrorNumber", ALPACA_ERR_NOT_IMPLEMENTED);
+    cJSON_AddStringToObject(root, "ErrorMessage", ALPACA_ERR_MESSAGE_NOT_IMPLEMENTED);
+  }
+
+  return api->send_json_response(req, &parsed_request, root);
+}
 
 } // namespace AlpacaServer

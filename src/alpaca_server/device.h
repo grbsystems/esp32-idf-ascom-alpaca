@@ -400,14 +400,14 @@ public:
   virtual esp_err_t put_abortslew() = 0;
   virtual esp_err_t get_axisrates(TelescopeAxis axis, std::vector<AxisRate> &rates) = 0;
   virtual esp_err_t get_canmoveaxis(TelescopeAxis axis, bool *canmoveaxis) = 0;
-  virtual esp_err_t get_destinationsideofpier(double rightascension, double declination, bool *sideofpier) = 0;
+  virtual esp_err_t get_destinationsideofpier(double rightascension, double declination, SideOfPier *sideofpier) = 0;
   virtual esp_err_t put_findhome() = 0;
   virtual esp_err_t put_moveaxis(TelescopeAxis axis, double rate) = 0;
   virtual esp_err_t put_park() = 0;
   virtual esp_err_t put_pulseguide(GuideDirection direction, int32_t duration) = 0;
   virtual esp_err_t put_setpark() = 0;
   virtual esp_err_t put_slewtoaltazasync(double altitude, double azimuth) = 0;
-  virtual esp_err_t put_slewtocordinatesasync(double rightascension, double declination) = 0;
+  virtual esp_err_t put_slewtocoordinatesasync(double rightascension, double declination) = 0;
   virtual esp_err_t put_slewtotargetasync() = 0;
   virtual esp_err_t put_synctoaltaz(double altitude, double azimuth) = 0;
   virtual esp_err_t put_synctocoordinates(double rightascension, double declination) = 0;
