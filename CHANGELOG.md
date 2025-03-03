@@ -1,3 +1,9 @@
+## 1.2.2 (2025-03-03)
+
+### Fix
+
+- **telescope**: use enums for values where possible
+
 ## 1.2.1 (2025-02-26)
 
 ### Fix
