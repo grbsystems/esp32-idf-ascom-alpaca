@@ -291,6 +291,45 @@ public:
     double max;
   };
 
+  enum SideOfPier
+  {
+    East = 0,
+    West = 1,
+    Unknown = -1,
+  };
+
+  enum EquatorialSystem
+  {
+    Other = 0,
+    Topocentric = 1,
+    J2000 = 2,
+    J2050 = 3,
+    B1950 = 4,
+  };
+
+  enum TrackingRate
+  {
+    Sidereal = 0,
+    Lunar = 1,
+    Solar = 2,
+    King = 3,
+  };
+
+  enum TelescopeAxis
+  {
+    Primary = 0,
+    Secondary = 1,
+    Tertiary = 2,
+  };
+
+  enum GuideDirection
+  {
+    North = 0,
+    South = 1,
+    East = 2,
+    West = 3,
+  };
+
 public:
   Telescope();
   ~Telescope();
@@ -325,7 +364,7 @@ public:
   virtual esp_err_t put_declinationrate(double declinationrate) = 0;
   virtual esp_err_t get_doesrefraction(bool *doesrefraction) = 0;
   virtual esp_err_t put_doesrefraction(bool doesrefraction) = 0;
-  virtual esp_err_t get_equatorialsystem(bool *equatorialsystem) = 0;
+  virtual esp_err_t get_equatorialsystem(EquatorialSystem *equatorialsystem) = 0;
   virtual esp_err_t get_focallength(double *focallength) = 0;
   virtual esp_err_t get_guideratedeclination(double *guideratedeclination) = 0;
   virtual esp_err_t put_guideratedeclination(double guideratedeclination) = 0;
@@ -335,8 +374,8 @@ public:
   virtual esp_err_t get_rightascension(double *rightascension) = 0;
   virtual esp_err_t get_rightascensionrate(double *rightascensionrate) = 0;
   virtual esp_err_t put_rightascensionrate(double rightascensionrate) = 0;
-  virtual esp_err_t get_sideofpier(bool *sideofpier) = 0;
-  virtual esp_err_t put_sideofpier(bool sideofpier) = 0;
+  virtual esp_err_t get_sideofpier(SideOfPier *sideofpier) = 0;
+  virtual esp_err_t put_sideofpier(SideOfPier sideofpier) = 0;
   virtual esp_err_t get_siderealtime(double *siderealtime) = 0;
   virtual esp_err_t get_siteelevation(double *siteelevation) = 0;
   virtual esp_err_t put_siteelevation(double siteelevation) = 0;
@@ -353,19 +392,19 @@ public:
   virtual esp_err_t put_targetrightascension(double targetrightascension) = 0;
   virtual esp_err_t get_tracking(bool *tracking) = 0;
   virtual esp_err_t put_tracking(bool tracking) = 0;
-  virtual esp_err_t get_trackingrate(int32_t *trackingrate) = 0;
-  virtual esp_err_t put_trackingrate(int32_t trackingrate) = 0;
-  virtual esp_err_t get_trackingrates(std::vector<int32_t> &trackingrates) = 0;
+  virtual esp_err_t get_trackingrate(TrackingRate *trackingrate) = 0;
+  virtual esp_err_t put_trackingrate(TrackingRate trackingrate) = 0;
+  virtual esp_err_t get_trackingrates(std::vector<TrackingRate> &trackingrates) = 0;
   virtual esp_err_t get_utcdate(std::string &utcdate) = 0;       // ISO 8601
   virtual esp_err_t put_utcdate(const std::string &utcdate) = 0; // ISO 8601
   virtual esp_err_t put_abortslew() = 0;
-  virtual esp_err_t get_axisrates(int32_t axis, std::vector<AxisRate> &rates) = 0;
-  virtual esp_err_t get_canmoveaxis(int32_t axis, bool *canmoveaxis) = 0;
+  virtual esp_err_t get_axisrates(TelescopeAxis axis, std::vector<AxisRate> &rates) = 0;
+  virtual esp_err_t get_canmoveaxis(TelescopeAxis axis, bool *canmoveaxis) = 0;
   virtual esp_err_t get_destinationsideofpier(double rightascension, double declination, bool *sideofpier) = 0;
   virtual esp_err_t put_findhome() = 0;
-  virtual esp_err_t put_moveaxis(int32_t axis, double rate) = 0;
+  virtual esp_err_t put_moveaxis(TelescopeAxis axis, double rate) = 0;
   virtual esp_err_t put_park() = 0;
-  virtual esp_err_t put_pulseguide(int32_t direction, int32_t duration) = 0;
+  virtual esp_err_t put_pulseguide(GuideDirection direction, int32_t duration) = 0;
   virtual esp_err_t put_setpark() = 0;
   virtual esp_err_t put_slewtoaltazasync(double altitude, double azimuth) = 0;
   virtual esp_err_t put_slewtocordinatesasync(double rightascension, double declination) = 0;
