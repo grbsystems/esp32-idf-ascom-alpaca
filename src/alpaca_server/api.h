@@ -32,6 +32,12 @@ namespace AlpacaServer
 {
 esp_err_t error_message(uint16_t error_code, char *buf, size_t len);
 
+typedef esp_err_t (*custom_error_message_handler_t)(uint16_t error_code, char *buf, size_t len);
+
+custom_error_message_handler_t set_custom_error_message_handler(
+    custom_error_message_handler_t custom_error_message_handler
+);
+
 typedef struct
 {
   cJSON *body;

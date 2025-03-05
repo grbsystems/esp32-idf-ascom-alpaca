@@ -7,6 +7,7 @@
 #include <mbedtls/md5.h>
 
 static const char *TAG = "alpaca_server_api";
+static AlpacaServer::custom_error_message_handler_t s_err_msg_func = &AlpacaServer::error_message;
 
 #define REGISTER_DEVICE_ROUTE(device_type, endpoint, device_number, http_method, name)                                 \
   {                                                                                                                    \
@@ -53,6 +54,15 @@ esp_err_t error_message(uint16_t error_code, char *buf, size_t len)
   }
 
   return ESP_OK;
+}
+
+custom_error_message_handler_t set_custom_error_message_handler(
+    custom_error_message_handler_t custom_error_message_handler
+)
+{
+  AlpacaServer::custom_error_message_handler_t old = s_err_msg_func;
+  s_err_msg_func = custom_error_message_handler;
+  return old;
 }
 
 Api::Api(
