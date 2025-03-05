@@ -51,6 +51,8 @@ esp_err_t error_message(uint16_t error_code, char *buf, size_t len)
   case ALPACA_ERR_ACTION_NOT_IMPLEMENTED:
     strncpy(buf, ALPACA_ERR_MESSAGE_ACTION_NOT_IMPLEMENTED, len);
     break;
+  default:
+    return ESP_ERR_NOT_FOUND;
   }
 
   return ESP_OK;
@@ -885,10 +887,18 @@ esp_err_t Api::handle_get_configured_devices(httpd_req_t *req)
 void set_error(esp_err_t err, cJSON *root)
 {
   char buf[128];
-  error_message(err, buf, sizeof(buf));
+  esp_err_t msgErr = s_err_msg_func(err, buf, sizeof(buf));
 
   cJSON_AddNumberToObject(root, "ErrorNumber", err);
-  cJSON_AddStringToObject(root, "ErrorMessage", buf);
+
+  if (msgErr == ESP_OK)
+  {
+    cJSON_AddStringToObject(root, "ErrorMessage", buf);
+  }
+  else
+  {
+    cJSON_AddStringToObject(root, "ErrorMessage", "Unknown error");
+  }
 }
 
 bool check_return(esp_err_t err, cJSON *root)
