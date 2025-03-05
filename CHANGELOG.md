@@ -1,3 +1,9 @@
+## 1.3.1 (2025-03-04)
+
+### Fix
+
+- small refactor for error messages
+
 ## 1.3.0 (2025-03-04)
 
 ### Feat
