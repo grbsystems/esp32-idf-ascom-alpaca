@@ -1,3 +1,9 @@
+## 1.3.0 (2025-03-04)
+
+### Feat
+
+- add custom error message handler for driver exceptions
+
 ## 1.2.4 (2025-03-03)
 
 ### Fix
