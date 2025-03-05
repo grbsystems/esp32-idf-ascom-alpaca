@@ -1,3 +1,9 @@
+## 1.3.2 (2025-03-04)
+
+### Fix
+
+- use the new custom error message handler
+
 ## 1.3.1 (2025-03-04)
 
 ### Fix
